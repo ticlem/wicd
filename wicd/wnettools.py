@@ -927,12 +927,15 @@ class BaseWiredInterface(BaseInterface):
             carrier = open(carrier_path, 'r')
             try:
                 link = carrier.read().strip()
+            except (IOError):
+                return False
+            try:
                 link = int(link)
                 if link == 1:
                     return True
                 elif link == 0:
                     return False
-            except (IOError, ValueError, TypeError):
+            except (ValueError, TypeError):
                 print 'Error checking link using /sys/class/net/%s/carrier' \
                     % self.iface
                 
